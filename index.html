@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html style="height: 100% !important; width: 100% !important;" lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Grafos</title>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection" />
+
+    <link type="text/css" rel="stylesheet" href="css/style.css" />
+    <link type="text/css" rel="stylesheet" href="css/icofont.min.css">
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body style="height:100% !important; overflow-y: hidden;">
+
+    <div id="click" class="hide-on-small-only hide-on-med-and-up"></div>
+
+    <nav>
+        <div class="nav-wrapper grey darken-3">
+            <a class="brand-logo center hide-on-small-only">Simple Graph Design</a>
+            <a class="brand-logo center hide-on-med-and-up">SGD</a>
+            <a href="#" class="sidenav-trigger show-on-large right" data-target="option-side">
+                <i class="icofont-settings"></i>
+            </a>
+        </div>
+    </nav>
+
+    <div id="optionsNode" class="float_div">
+        <form class="col s12">
+            <div class="row">
+                <ul>
+                    <li>
+                        <div class="input-field col s8 offset-s2">
+                            <select id="optionColor" style="border-color: #fff; color: 424242">
+                                <option value="#666">Padrão</option>
+                                <option value="#b71c1c">Vermelho</option>
+                                <option value="#1565c0">Azul</option>
+                            </select>
+                            <label style="color: #fff;">Cor do Node</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="input-field col s4 offset-s2">
+                            <a onclick="displayOptionsNodeOff(true)"><i class="icofont-check-alt icofont-2x center"
+                                    style="color:#e0e0e0;"></i></a>
+                        </div>
+                        <div class="input-field col s4 offset-s2">
+                            <a onclick="displayOptionsNodeOff(false)"><i class="icofont-close-line icofont-2x center"
+                                    style="color:#e0e0e0;"></i></a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </form>
+    </div>
+
+    <ul class="sidenav" id="option-side">
+        <div class="grey darken-3" style="height: 100% !important;">
+            <div class="row">
+                <ul>
+                    <li>
+                        <form class="col s12">
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="node" type="number" class="validate"
+                                        style="border-color: #fff; color: #fff;">
+                                    <label for="node" style="color: #fff;">Node</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <a href="#" class="btn grey darken-4 col s12"
+                                        onclick="BFSChamada(document.getElementById('node').value)"><span
+                                            class="white-text name">BFS</span></a>
+                                </div>
+                                <div class="input-field col s6">
+                                    <a href="#" class="btn grey darken-4 col s12"
+                                        onclick="DFSChamada(document.getElementById('node').value, -1)"><span
+                                            class="white-text name">DFS</span></a>
+                                </div>
+                            </div>
+                        </form>
+                    </li>
+                    <li>
+                        <form class="col s12">
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <a href="#" class="btn grey darken-4 col s12" onclick="resetColor()"><span
+                                            class="white-text name">Resatar Cor</span></a>
+                                </div>
+                                <div class="input-field col s6">
+                                    <a href="#" onclick="exportPng()"><i class="icofont-camera icofont-2x"
+                                            style="color:#e0e0e0;"></i></a>
+                                </div>
+                            </div>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </ul>
+
+    <div class="row" style="height: 90% !important;">
+        <div id="cy" class="grey lighten-2  col s12 m9 l9 xl9" style="height: 100% !important; display: block;"></div>
+        <div class="col s0 m3 l3 xl3 hide-on-small-only grey darken-3" style="height: 100% !important;">
+            <div id="table1" class="DFS_table">
+                <div class="row">
+                    <div class="input-field col s6">
+                        <a href="#" class="btn grey darken-4 col s12" onclick="estadosDFS(false)"><span
+                                class="white-text name">Ant</span></a>
+                    </div>
+                    <div class="input-field col s6">
+                        <a href="#" class="btn grey darken-4 col s12" onclick="estadosDFS(true)"><span
+                                class="white-text name">Prox</span></a>
+                    </div>
+                </div>
+                <div class="row">
+                    <table class="highlight responsive-table">
+                        <thead class="white-text text-darken-2">
+                            <tr>
+                                <th>Index</th>
+                                <th>Cor</th>
+                                <th>&pi;</th>
+                                <th>D</th>
+                                <th>F</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableDFS" class="white-text text-darken-2">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="table2" class="BFS_table">
+                <div class="row">
+                    <div class="input-field col s6">
+                        <a href="#" class="btn grey darken-4 col s12" onclick="estadosBFS(false)"><span
+                                class="white-text name">Ant</span></a>
+                    </div>
+                    <div class="input-field col s6">
+                        <a href="#" class="btn grey darken-4 col s12" onclick="estadosBFS(true)"><span
+                                class="white-text name">Prox</span></a>
+                    </div>
+                </div>
+                <div class="row">
+                        <span class="white-text text-darken-2">Fila: </span>
+                    <span class="white-text text-darken-2" id="fila"></span>
+                </div>
+                <div class="row">
+                    <table class="highlight responsive-table">
+                        <thead class="white-text text-darken-2">
+                            <tr>
+                                <th>Index</th>
+                                <th>Cor</th>
+                                <th>&pi;</th>
+                                <th>&sigma;</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBFS" class="white-text text-darken-2">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--JavaScript at end of body for optimized loading-->
+    <script type="text/javascript" src="js/materialize.min.js"></script>
+    <script src="js/cytoscape.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var elems = document.querySelectorAll(".sidenav");
+            var instances = M.Sidenav.init(elems);
+
+            var elems = document.querySelectorAll('select');
+            var instances = M.FormSelect.init(elems);
+        });
+    </script>
+    <script type="text/javascript" src="js/code.js"></script>
+    <script type="text/javascript" src="js/algortmos.js"></script>
+</body>
+
+</html>
